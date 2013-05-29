@@ -1,0 +1,6 @@
+*.swp
+pygithub/projects/*
+pygithub/view
+pygithub/cache
+venv
+

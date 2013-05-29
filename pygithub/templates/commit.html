@@ -1,0 +1,14 @@
+<!doctype html>
+<title>Commit: {{ commit.name_rev }}</title>
+<h1>Commit: {{commit.name_rev}}</h1>
+<h3>Author: {{commit.author}}</h3>
+<h3>Date: {{commit.authored_date}}</h3>
+<h3>Message: {{commit.message}}</h3>
+{% if commit.stats:%}
+<ul>
+{% for i in commit.stats.files: %}
+<li><em>{{i}}:</em> 
+</li>
+{% endfor %}
+</ul>
+{% endif %}

@@ -1,0 +1,15 @@
+<!doctype html>
+<title>{{ dirname }}/{{branch}}</title>
+<h1>{{dirname}}/{{branch}}:</h1>
+<h2>Branches:</h2>
+<ul>
+{% for i in heads: %}
+<li><a href="/{{dirname}}/{{i}}">{{i}}</a></li>
+{% endfor %}
+</ul>
+<ul>
+<h2>Commits:</h2>
+{% for i in commits: %}
+<li><a href="commit/{{i.hexsha}}">{{i.committed_date}}, {{i.committer}}, {{i.hexsha}}, {{i.message}}</a></li>
+{% endfor %}
+</ul>
