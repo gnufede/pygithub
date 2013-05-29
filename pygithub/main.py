@@ -1,10 +1,13 @@
+#!/usr/bin/env python
+# coding=utf8
 from flask import Flask, render_template
+from flask.ext.bootstrap import Bootstrap
 from os import walk, listdir
 from os.path import join, isdir
-#from git import *
 import git 
 
 app = Flask(__name__)
+Bootstrap(app)
 projectsDir = "./projects"
 @app.route("/")
 def directoryList():
@@ -26,8 +29,7 @@ def commit(dirname=None, commitsha=None):
     repo = git.Repo(join(projectsDir, dirname), odbt=git.GitDB)
     if commitsha:
         commit = git.objects.base.Object.new(repo,commitsha)
-        diff = commit.diff('HEAD~1')
-        return render_template('commit.html', commit=commit, diff=diff )
+        return render_template('commit.html', commit=commit)
 
 if __name__ == "__main__":
     app.run(debug=True)
