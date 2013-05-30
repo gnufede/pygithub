@@ -29,7 +29,14 @@ def commit(dirname=None, commitsha=None):
     repo = git.Repo(join(projectsDir, dirname), odbt=git.GitDB)
     if commitsha:
         commit = git.objects.base.Object.new(repo,commitsha)
-        return render_template('commit.html', commit=commit)
+        parents_diffindexes = [commit.diff(x, create_patch=True) for x in commit.parents]
+
+        diffindexes = []
+        for diffindex in parents_diffindexes:
+            for diff in diffindex:
+                diff_tokenized = diff.diff.split('\n')
+                diffindexes.append(diff_tokenized)
+        return render_template('commit.html', commit=commit, diffs=diffindexes)
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -23,21 +23,23 @@
 
     <div class="container">
       <!-- Main hero unit for a primary marketing message or call to action -->
-      <div class="hero-unit">
-        <h1>{{dirname}}/{{branch}}:</h1>
-        <p>
-            <h2>Branches:</h2>
-            <ul class="nav nav-tabs nav-stacked">
+      <div class="btn-group">
+        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+        {{dirname}}/{{branch}}
+        <span class="caret"></span>
+        </a>
+          <ul class="dropdown-menu">
             {% for i in heads: %}
             <li><a href="/{{dirname}}/{{i}}">{{i}}</a></li>
             {% endfor %}
-            </ul>
-        </p>
+          </ul>
+      </div>
+      <div class="row">
         <p>
             <h2>Commits:</h2>
             <ul class="nav nav-tabs nav-stacked">
             {% for i in commits: %}
-            <li><a href="/{{dirname}}/commit/{{i.hexsha}}">{{i.committed_date}}, {{i.committer}}, {{i.hexsha}}, {{i.message}}</a></li>
+            <li><a href="/{{dirname}}/commit/{{i.hexsha}}"><span data-livestamp="{{i.committed_date}}"></span><span> {{i.committer}} , {{i.message}}</span><span class="text-right">[{{i.hexsha}}]</span></a></li>
             {% endfor %}
             </ul>
         </p>
@@ -46,3 +48,8 @@
     </div>
 {% endblock %}
 
+{% block bootstrap_js_bottom %}
+  {{super()}}
+  <script src="/static/moment.min.js"></script>
+  <script src="/static/livestamp.min.js"></script>
+{% endblock %}
