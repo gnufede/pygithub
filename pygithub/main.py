@@ -27,6 +27,7 @@ def repoDir(dirname=None, branch='master'):
 @app.route("/<dirname>/commit/<commitsha>")
 def commit(dirname=None, commitsha=None):
     repo = git.Repo(join(projectsDir, dirname), odbt=git.GitDB)
+    heads = repo.heads
     if commitsha:
         commit = git.objects.base.Object.new(repo,commitsha)
         parents_diffindexes = [commit.diff(x, create_patch=True) for x in commit.parents]
@@ -36,7 +37,7 @@ def commit(dirname=None, commitsha=None):
             for diff in diffindex:
                 diff_tokenized = diff.diff.split('\n')
                 diffindexes.append(diff_tokenized)
-        return render_template('commit.html', commit=commit, diffs=diffindexes)
+        return render_template('commit.html', commit=commit, diffs=diffindexes, dirname=dirname, heads=heads)
 
 if __name__ == "__main__":
     app.run(debug=True)

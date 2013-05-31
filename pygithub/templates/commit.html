@@ -22,8 +22,25 @@
 
     <div class="container">
       <!-- Main hero unit for a primary marketing message or call to action -->
+      <div class="btn-toolbar">
+      <div class="btn-group">
+          <a class="btn" href="/">&laquo;</a>
+        <a class="btn" href="#">
+            {{dirname}}
+        </a>
+        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+            {{commit.name_rev}}
+        <span class="caret"></span>
+        </a>
+          <ul class="dropdown-menu">
+            {% for i in heads: %}
+            <li><a href="/{{dirname}}/{{i}}">{{i}}</a></li>
+            {% endfor %}
+          </ul>
+      </div>
+      </div>
+
       <p>
-        <h1>Commit: {{commit.name_rev}}</h1>
         <h3>Author: {{commit.author}}</h3>
         <h3><span data-livestamp="{{commit.authored_date}}"></span></h3>
         <h3>Message: {{commit.message}}</h3>

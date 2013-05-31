@@ -24,6 +24,7 @@
     <div class="container">
       <!-- Main hero unit for a primary marketing message or call to action -->
       <div class="btn-group">
+        <a class="btn" href="{{"/"}}">&laquo;</a>
         <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
         {{dirname}}/{{branch}}
         <span class="caret"></span>
@@ -39,7 +40,7 @@
             <h2>Commits:</h2>
             <ul class="nav nav-tabs nav-stacked">
             {% for i in commits: %}
-            <li><a href="/{{dirname}}/commit/{{i.hexsha}}"><span data-livestamp="{{i.committed_date}}"></span><span> {{i.committer}} , {{i.message}}</span><span class="text-right">[{{i.hexsha}}]</span></a></li>
+            <li><a href="/{{dirname}}/commit/{{i.hexsha}}"><span data-livestamp="{{i.committed_date}}"></span><span> {{i.committer}}: "{{i.message}}"</span><span class="pull-right text-right">[{{i.hexsha}}]</span></a></li>
             {% endfor %}
             </ul>
         </p>
