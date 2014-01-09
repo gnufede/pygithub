@@ -40,7 +40,7 @@
             <h2>Commits:</h2>
             <ul class="nav nav-tabs nav-stacked">
             {% for i in commits: %}
-            <li><a href="/{{dirname}}/commit/{{i.hexsha}}"><span data-livestamp="{{i.committed_date}}"></span><span> {{i.committer}}: "{{i.message}}"</span><span class="pull-right text-right">[{{i.hexsha}}]</span></a></li>
+            <li><a href="/{{dirname}}/commit/{{i.hexsha}}"><span data-livestamp="{{i.committed_date}}"></span><span>, {{i.committer}} commited: <em>"{{i.message}}"</em></span><span class="pull-right text-right"><code>{{i.hexsha[:10]}}</code></span></a></li>
             {% endfor %}
             </ul>
         </p>

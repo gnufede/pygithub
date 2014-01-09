@@ -45,22 +45,6 @@
         <h3>Author: {{commit.author}}</h3>
         <h3><span data-livestamp="{{commit.authored_date}}"></span></h3>
         <h3>Message: {{commit.message}}</h3>
-        {% if commit.tree:%}
-        <ul class="nav nav-tabs nav-stacked">
-            {% for i in commit.tree: %}
-            <li>
-                {% if i.type == 'tree': %}
-                    <i class="icon-folder-open"></i>
-                {{i.name}}
-                {% else: %}
-                <i class="icon-file"></i>
-                {{i.name}}
-                <pre><code>{{i.data_stream.read()}}</code></pre>
-                {% endif %}
-            </li>
-            {% endfor %}
-        </ul>
-        {% endif %}
         {% if diffs:%}
         <h3>Diff from parent(s):</h3>
         <ul class="nav nav-tabs nav-stacked">
@@ -82,6 +66,24 @@
         </ul>
         </li>
         {% endfor %}
+        </ul>
+        {% endif %}
+
+        {% if commit.tree:%}
+        <h3>Files in tree:</h3>
+        <ul class="nav nav-tabs nav-stacked">
+            {% for i in commit.tree: %}
+            <li>
+                {% if i.type == 'tree': %}
+                    <i class="icon-folder-open"></i>
+                {{i.name}}
+                {% else: %}
+                <i class="icon-file"></i>
+                {{i.name}}
+                <pre><code>{{i.data_stream.read()}}</code></pre>
+                {% endif %}
+            </li>
+            {% endfor %}
         </ul>
         {% endif %}
       </p>
