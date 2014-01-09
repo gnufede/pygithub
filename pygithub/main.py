@@ -43,13 +43,8 @@ def commit(dirname=None, commitsha=None):
     heads = repo.heads
     if commitsha:
         commit = git.objects.base.Object.new(repo,commitsha)
-        parents_diffindexes = [commit.diff(x, create_patch=True)
-                                for x in commit.parents]
-        diffindexes = []
-        for diffindex in parents_diffindexes:
-            for diff in diffindex:
-                diff_tokenized = diff.diff.split('\n')
-                diffindexes.append(diff_tokenized)
+        diffindexes = [diff.diff.split('\n') for x in commit.parents
+                        for diff in commit.diff(x, create_patch=True)]
         return render_template('commit.html',
                                 commit=commit,
                                 diffs=diffindexes,
