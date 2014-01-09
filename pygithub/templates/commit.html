@@ -62,11 +62,21 @@
         </ul>
         {% endif %}
         {% if diffs:%}
-        <h3>Diff to parent(s):</h3>
+        <h3>Diff from parent(s):</h3>
         <ul class="nav nav-tabs nav-stacked">
-        {% for di in diffs: %}
-        {% for d in di %}
-        <li><b>{{d}}</b> 
+        {% for diff in diffs: %}
+        {% for line in diff %}
+        <li>
+        {% if line[0] == '-': %}
+        <b style="color:red">
+        {% elif line[0] == '+': %}
+        <b style="color:green">
+        {% else: %}
+        <b>
+        {% endif %}
+        {{line}}
+        </b> 
+
         </li>
         {% endfor %}
         </ul>

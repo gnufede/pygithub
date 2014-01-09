@@ -44,7 +44,7 @@ def commit(dirname=None, commitsha=None):
     if commitsha:
         commit = git.objects.base.Object.new(repo,commitsha)
         diffindexes = [diff.diff.split('\n') for x in commit.parents
-                        for diff in commit.diff(x, create_patch=True)]
+                        for diff in x.diff(commit, create_patch=True)]
         return render_template('commit.html',
                                 commit=commit,
                                 diffs=diffindexes,
