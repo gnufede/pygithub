@@ -16,7 +16,7 @@ if not isdir(projectsDir):
 @app.route("/")
 def directoryList():
     directoryList =  [d for d in listdir(projectsDir)\
-                      if isdir(join(projectsDir,d))]
+                      if git.repo.fun.is_git_dir(join(projectsDir,d))]
     return render_template('dirlist.html',directoryList=directoryList)
 
 @app.route("/new/<dirname>")
