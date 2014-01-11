@@ -2,16 +2,21 @@
 # coding=utf8
 from flask import Flask, render_template, redirect, url_for
 from flask.ext.bootstrap import Bootstrap
-from os import walk, listdir, makedirs
-from os.path import join, isdir
+from os import walk, listdir, makedirs, getlogin
+from os.path import join, isdir, abspath
 import git
 
 app = Flask(__name__)
 Bootstrap(app)
 projectsDir = "./projects"
+hostname = [app.config['SERVER_NAME'], 'localhost']\
+                [int(app.config['SERVER_NAME'] is None)]
 
 if not isdir(projectsDir):
     makedirs(projectsDir)
+
+def getRepoUrl(dirname):
+    return ''.join((getlogin(), '@', hostname, ':', abspath(dirname)))
 
 @app.route("/")
 def directoryList():
@@ -29,18 +34,16 @@ def createRepo(dirname=None):
 @app.route("/<dirname>")
 def repoDir(dirname=None, branch='master'):
     repo = git.Repo(join(projectsDir, dirname), odbt=git.GitDB)
-    heads = repo.heads
-    commits = repo.iter_commits(branch, max_count=100)
     return render_template('repoinfo.html',
+                            repoUrl = getRepoUrl(join(projectsDir,dirname)),
                             dirname=dirname,
-                            heads=heads,
-                            commits=commits,
+                            heads=repo.heads,
+                            commits=repo.iter_commits(branch, max_count=100),
                             branch=branch)
 
 @app.route("/<dirname>/commit/<commitsha>")
 def commit(dirname=None, commitsha=None):
     repo = git.Repo(join(projectsDir, dirname), odbt=git.GitDB)
-    heads = repo.heads
     if commitsha:
         commit = git.objects.base.Object.new(repo,commitsha)
         diffindexes = [diff.diff.split('\n') for x in commit.parents
@@ -49,7 +52,7 @@ def commit(dirname=None, commitsha=None):
                                 commit=commit,
                                 diffs=diffindexes,
                                 dirname=dirname,
-                                heads=heads)
+                                heads=repo.heads)
 
 if __name__ == "__main__":
     app.run(debug=True)
