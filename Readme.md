@@ -3,7 +3,7 @@ Free implementantion of a Github-like site in Flask.
 ====================================================
 
 Steps to get it working
-=======================
+-----------------------
 
 Create and activate a virtualenv::
 
