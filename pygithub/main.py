@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # coding=utf8
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for,\
+                send_from_directory
 from flask.ext.bootstrap import Bootstrap
 from os import walk, listdir, makedirs, getlogin
 from os.path import join, isdir, abspath
@@ -18,22 +19,24 @@ if not isdir(projectsDir):
 def getRepoUrl(dirname):
     return ''.join((getlogin(), '@', hostname, ':', abspath(dirname)))
 
+@app.route("/favicon.ico")
+def favicon():
+    return send_from_directory(join(app.root_path, 'static'),
+                           'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
 @app.route("/")
 def directoryList():
     directoryList =  [d for d in listdir(projectsDir)\
                       if git.repo.fun.is_git_dir(join(projectsDir,d))]
     return render_template('dirlist.html',directoryList=directoryList)
 
-@app.route("/new/<dirname>")
-def createRepo(dirname=None):
-    if dirname:
-        repo = git.Repo.init(join(projectsDir, dirname), bare=True)
-        return redirect("/"+dirname)
-
 @app.route("/<dirname>/<branch>")
 @app.route("/<dirname>")
 def repoDir(dirname=None, branch='master'):
-    repo = git.Repo(join(projectsDir, dirname), odbt=git.GitDB)
+    if dirname and not git.repo.fun.is_git_dir(join(projectsDir,dirname)):
+        repo = git.Repo.init(join(projectsDir, dirname), bare=True)
+    else:
+        repo = git.Repo(join(projectsDir, dirname), odbt=git.GitDB)
     return render_template('repoinfo.html',
                             repoUrl = getRepoUrl(join(projectsDir,dirname)),
                             dirname=dirname,

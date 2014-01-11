@@ -22,6 +22,10 @@
 
     <div class="container">
       <!-- Main hero unit for a primary marketing message or call to action -->
+      <div class="alert alert-info">
+          To create a repo named "example", simply go to <a href={{ url_for('repoDir', dirname='example') }}>
+              {{ url_for('repoDir', dirname='example') }}</a>
+      </div>
       <p>
         <ul class="nav nav-tabs nav-stacked">
             {% for i in directoryList %}
