@@ -1,23 +1,24 @@
 #!/usr/bin/env python
 # coding=utf8
-from flask import Flask, render_template, redirect, url_for,\
-                send_from_directory
+from flask import Flask, render_template, send_from_directory
 from flask.ext.bootstrap import Bootstrap
-from os import walk, listdir, makedirs, getlogin
+from os import listdir, makedirs, getlogin
 from os.path import join, isdir, abspath
 import git
 
+hostname = '' # Define here the hostname to access the repo
+user = 'peine' # Define here the user you would use to access the repo
+projectsDir = './projects' # Define here the directory for projects
+
 app = Flask(__name__)
 Bootstrap(app)
-projectsDir = "./projects"
-hostname = [app.config['SERVER_NAME'], 'localhost']\
-                [int(app.config['SERVER_NAME'] is None)]
+
+hostname = hostname or app.config['SERVER_NAME'] or 'localhost'
+user = user or getlogin()
+repoUrl = ''.join((user, '@', hostname, ':', abspath(projectsDir)))
 
 if not isdir(projectsDir):
     makedirs(projectsDir)
-
-def getRepoUrl(dirname):
-    return ''.join((getlogin(), '@', hostname, ':', abspath(dirname)))
 
 @app.route("/favicon.ico")
 def favicon():
@@ -38,7 +39,7 @@ def repoDir(dirname=None, branch='master'):
     else:
         repo = git.Repo(join(projectsDir, dirname), odbt=git.GitDB)
     return render_template('repoinfo.html',
-                            repoUrl = getRepoUrl(join(projectsDir,dirname)),
+                            repoUrl = '/'.join((repoUrl, dirname)),
                             dirname=dirname,
                             heads=repo.heads,
                             commits=repo.iter_commits(branch, max_count=100),
